@@ -6,20 +6,18 @@ require 'mocha'
 module Raiskeleton
   class SectionTest < Test::Unit::TestCase
     context "name" do
-      should "create a section with given name" do
-        section = Raiskeleton::Section.new "right"
-        assert_equal "right", section.name
+      should "create a section with given name and when valid_name? is true" do
+        name = stub
+        Raiskeleton::Section.stubs(:valid_name?).with(name).returns(true).once
+        section = Raiskeleton::Section.new name
+        assert_equal name, section.name
       end
 
-      should "raise a exception when name is nil" do
+      should "raise a exception when valid_name? is false" do
+        name = stub
+        Raiskeleton::Section.stubs(:valid_name?).with(name).returns(false).once
         assert_raise(RuntimeError) do
-          Raiskeleton::Section.new nil
-        end
-      end
-
-      should "raise an exception when name is empty" do
-        assert_raise(RuntimeError) do
-          Raiskeleton::Section.new ""
+          Raiskeleton::Section.new name
         end
       end
     end
@@ -80,6 +78,20 @@ module Raiskeleton
             @section.render_cell name, "", stub
           end
         end
+      end
+    end
+
+    context "valid_name?" do
+      should "return false when name is nil" do
+        assert_equal false, Raiskeleton::Section.valid_name?(nil)
+      end
+
+      should "return false when name is empty" do
+        assert_equal false, Raiskeleton::Section.valid_name?("")
+      end
+
+      should "return true when name is not empty and not nil" do
+        assert Raiskeleton::Section.valid_name?("section")
       end
     end
   end
