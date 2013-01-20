@@ -4,6 +4,7 @@ module Raiskeleton
   class Skeleton
     attr_accessor :groups
     attr_accessor :pages
+
     def initialize
       self.groups = {}
       self.pages = {}

@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+#lib = File.expand_path('../lib/', __FILE__)
+#$:.unshift lib unless $:.include?(lib)
 require File.expand_path('../lib/raiskeleton/version', __FILE__)
 
 Gem::Specification.new do |gem|
@@ -17,4 +19,8 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "actionpack",  "~> 3.0"
   gem.add_dependency "cells", "~> 3.8.5"
+
+  gem.add_development_dependency 'shoulda'
+  gem.add_development_dependency 'mocha'
+  gem.add_development_dependency 'rake'
 end
