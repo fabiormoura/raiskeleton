@@ -6,7 +6,7 @@ module Raiskeleton
     INVALID_NAME = "section name cannot be nil or empty"
 
     def initialize(name)
-      raise INVALID_NAME if not Raiskeleton::Section.valid_name?(name)
+      raise INVALID_NAME if not Raiskeleton::Section.name_valid?(name)
       self.name = name
       self.cells = []
     end
@@ -17,7 +17,7 @@ module Raiskeleton
       self.cells << {:name => name, :state => state, :args => args}
     end
 
-    def self.valid_name?(name)
+    def self.name_valid?(name)
       !name.nil? && !name.empty?
     end
   end
