@@ -6,20 +6,18 @@ require 'mocha'
 module Raiskeleton
   class LayoutTest < Test::Unit::TestCase
     context "name" do
-      should "create a layout with the given name" do
-        layout = Raiskeleton::Layout.new "layout"
-        assert_equal "layout", layout.name
+      should "create a section with given name and when name_valid? is true" do
+        name = stub
+        Raiskeleton::Layout.stubs(:name_valid?).with(name).returns(true).once
+        layout = Raiskeleton::Layout.new name
+        assert_equal name, layout.name
       end
 
-      should "raise and exception when name is nil" do
+      should "raise a exception when name_valid? is false" do
+        name = stub
+        Raiskeleton::Layout.stubs(:name_valid?).with(name).returns(false).once
         assert_raise(RuntimeError) do
-          layout = Raiskeleton::Layout.new nil
-        end
-      end
-
-      should "raise and exception when name is empty" do
-        assert_raise(RuntimeError) do
-          layout = Raiskeleton::Layout.new ""
+          Raiskeleton::Layout.new name
         end
       end
     end
@@ -29,6 +27,7 @@ module Raiskeleton
         name = stub(:nil? => false, :empty? => false)
         @layout = Raiskeleton::Layout.new name
       end
+
       should "create a layout with no sections" do
         assert @layout.sections.empty?
       end
@@ -37,7 +36,7 @@ module Raiskeleton
         name = stub
         section = stub
 
-        Raiskeleton::Section.stubs(:valid_name?).returns(true)
+        Raiskeleton::Section.stubs(:name_valid?).returns(true)
         Raiskeleton::Section.expects(:new).with(name).returns(stub)
 
         @layout.update_section(name)
@@ -47,7 +46,7 @@ module Raiskeleton
       end
 
       should "raise an exception when section name is not valid" do
-        Raiskeleton::Section.stubs(:valid_name?).returns(false)
+        Raiskeleton::Section.stubs(:name_valid?).returns(false)
         assert_raise(RuntimeError) do
           @layout.update_section(stub)
         end
@@ -56,7 +55,7 @@ module Raiskeleton
       should "not create a new section when name already exists" do
         name = stub
         section = stub
-        Raiskeleton::Section.stubs(:valid_name?).returns(true)
+        Raiskeleton::Section.stubs(:name_valid?).returns(true)
         Raiskeleton::Section.expects(:new).with(name).returns(section).once
 
         @layout.update_section(name)
@@ -67,12 +66,26 @@ module Raiskeleton
       should "call block when updating section" do
         name = stub
         section = stub
-        Raiskeleton::Section.stubs(:valid_name?).returns(true)
+        Raiskeleton::Section.stubs(:name_valid?).returns(true)
         Raiskeleton::Section::expects(:new).with(name).returns(section)
         block = Proc.new { }
         block.expects(:call).with(section)
 
         @layout.update_section(name,&block)
+      end
+    end
+
+    context "name_valid?" do
+      should "return false when name is nil" do
+        assert_equal false, Raiskeleton::Layout.name_valid?(nil)
+      end
+
+      should "return false when name is empty" do
+        assert_equal false, Raiskeleton::Layout.name_valid?("")
+      end
+
+      should "return true when name is not empty and not nil" do
+        assert Raiskeleton::Layout.name_valid?("layout")
       end
     end
   end
