@@ -6,7 +6,7 @@ require 'mocha'
 module Raiskeleton
   class LayoutTest < Test::Unit::TestCase
     context "name" do
-      should "create a section with given name and when name_valid? is true" do
+      should "create a layout with given name and when name_valid? is true" do
         name = stub
         Raiskeleton::Layout.stubs(:name_valid?).with(name).returns(true).once
         layout = Raiskeleton::Layout.new name
