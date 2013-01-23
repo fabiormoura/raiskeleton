@@ -21,7 +21,6 @@ module Raiskeleton
     end
 
     def add_layout(name, &block)
-      raise Raiskeleton::Layout::INVALID_NAME if not Raiskeleton::Layout.name_valid?(name)
       raise "layout #{name} was already create to the group #{self.name}" if self.layouts.has_key?(name)
 
       layout = Raiskeleton::Layout.new(name)

@@ -57,13 +57,6 @@ module Raiskeleton
         assert_equal layout.class, @group.layouts[name].class
       end
 
-      should "raise an exception when layout name is not valid" do
-        Raiskeleton::Layout.stubs(:name_valid?).returns(false)
-        assert_raise(RuntimeError) do
-          @group.add_layout(stub)
-        end
-      end
-
       should "raise an exception when layout is already exists" do
         name = stub
         Raiskeleton::Layout.stubs(:name_valid?).returns(true)
