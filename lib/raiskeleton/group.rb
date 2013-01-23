@@ -2,36 +2,41 @@ require 'raiskeleton/layout'
 
 module Raiskeleton
   class Group
+    @@registered_group_names = []
     attr_accessor :layouts
     attr_accessor :name
     attr_accessor :default_layout
 
-    def default_layout=(name)
-      raise "There is no layout to specified name #{name}" unless self.layouts.has_key?(name.to_s)
-      @default_layout = name
+    def self.registered_group_names
+      @@registered_group_names
     end
 
     def initialize(name)
-      raise "group name should not be blank" if name.blank?
+      raise "group name cannot not be nil or empty" if name.nil? || name.empty?
+      raise "group name already exists" if @@registered_group_names.include?(name)
+
+      @@registered_group_names << name
       self.name = name
       self.layouts = {}
     end
 
-    def add_layout(name)
+    def add_layout(name, &block)
+      raise Raiskeleton::Layout::INVALID_NAME if not Raiskeleton::Layout.name_valid?(name)
+      raise "layout #{name} was already create to the group #{self.name}" if self.layouts.has_key?(name)
+
       layout = Raiskeleton::Layout.new(name)
-      raise "layout #{layout.name} was already specified" if self.layouts.has_key?(layout.name.to_s)
-      yield(layout)
-      self.layouts[layout.name.to_s] = layout
+      self.layouts[name] = layout
+      block.call(layout) if block_given?
     end
 
-    def get_layout(name)
-      raise "layout #{name} does not exist" unless self.layouts.has_key?(name.to_s)
-      self.layouts[name.to_s]
-    end
+#    def get_layout(name)
+#      raise "layout #{name} does not exist" unless self.layouts.has_key?(name.to_s)
+#      self.layouts[name.to_s]
+#   end
 
-    def get_default_layout
-      layout = self.get_layout(self.default_layout)
-      return layout
-    end
+#    def get_default_layout
+#      layout = self.get_layout(self.default_layout)
+#      return layout
+#    end
   end
 end
