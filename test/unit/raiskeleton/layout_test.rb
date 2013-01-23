@@ -45,13 +45,6 @@ module Raiskeleton
         assert_equal section, @layout.sections[name]
       end
 
-      should "raise an exception when section name is not valid" do
-        Raiskeleton::Section.stubs(:name_valid?).returns(false)
-        assert_raise(RuntimeError) do
-          @layout.update_section(stub)
-        end
-      end
-
       should "not create a new section when name already exists" do
         name = stub
         section = stub

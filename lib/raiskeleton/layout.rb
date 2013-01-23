@@ -14,7 +14,6 @@ module Raiskeleton
     end
 
     def update_section(name, &block)
-      raise Raiskeleton::Section::INVALID_NAME if not Raiskeleton::Section.name_valid?(name)
       if not sections.has_key?(name)
         sections[name] = Raiskeleton::Section.new(name)
       end
