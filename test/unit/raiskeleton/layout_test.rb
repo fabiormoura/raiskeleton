@@ -37,12 +37,12 @@ module Raiskeleton
         section = stub
 
         Raiskeleton::Section.stubs(:name_valid?).returns(true)
-        Raiskeleton::Section.expects(:new).with(name).returns(stub)
+        Raiskeleton::Section.expects(:new).with(name).returns(section)
 
         @layout.update_section(name)
 
         assert @layout.sections.key?(name)
-        assert_equal section.class, @layout.sections[name].class
+        assert_equal section, @layout.sections[name]
       end
 
       should "raise an exception when section name is not valid" do
