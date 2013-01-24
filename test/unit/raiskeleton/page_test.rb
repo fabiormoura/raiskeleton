@@ -26,8 +26,8 @@ module Raiskeleton
 
     context "sections" do
       setup do
-        name = stub(:empty? => false)
-        @page = Raiskeleton::Page.new name
+        action = stub(:empty? => false)
+        @page = Raiskeleton::Page.new action
       end
 
       should "create a page with no sections" do
