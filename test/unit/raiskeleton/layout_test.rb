@@ -13,7 +13,7 @@ module Raiskeleton
         assert_equal name, layout.name
       end
 
-      should "raise a exception when name_valid? is false" do
+      should "raise an exception when name_valid? is false" do
         name = stub
         Raiskeleton::Layout.stubs(:name_valid?).with(name).returns(false).once
         assert_raise(RuntimeError) do

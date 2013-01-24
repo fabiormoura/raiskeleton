@@ -5,7 +5,7 @@ require 'page'
 module Raiskeleton
   class PageTest < Test::Unit::TestCase
     context "action" do
-      should "create a with given action" do
+      should "create a page with given action" do
         action = stub(:empty? => false)
         page = Raiskeleton::Page.new action
         assert_equal action, page.action
