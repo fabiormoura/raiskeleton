@@ -5,28 +5,26 @@ require 'page'
 module Raiskeleton
   class PageTest < Test::Unit::TestCase
     context "action" do
-      should "create a page with given action" do
-        action = stub(:empty? => false)
+      should "create a page with given action and when action_valid? is true" do
+        action = stub
+        Raiskeleton::Page.stubs(:action_valid?).with(action).returns(true).once
         page = Raiskeleton::Page.new action
         assert_equal action, page.action
       end
 
-      should "raise an exception when action is nil" do
+      should "raise a exception when action_valid? is false" do
+        action = stub
+        Raiskeleton::Page.stubs(:action_valid?).with(action).returns(false).once
         assert_raise(RuntimeError) do
-          Raiskeleton::Page.new nil
-        end
-      end
-
-      should "raise an exception when action is empty" do
-        assert_raise(RuntimeError) do
-          Raiskeleton::Page.new ""
+          Raiskeleton::Page.new action
         end
       end
     end
 
     context "sections" do
       setup do
-        action = stub(:empty? => false)
+        action = stub
+        Raiskeleton::Page.stubs(:action_valid?).with(action).returns(true)
         @page = Raiskeleton::Page.new action
       end
 
@@ -67,6 +65,20 @@ module Raiskeleton
         block.expects(:call).with(section)
 
         @page.update_section(name,&block)
+      end
+    end
+
+    context "action_valid?" do
+      should "return false when name is nil" do
+        assert_equal false, Raiskeleton::Page.action_valid?(nil)
+      end
+
+      should "return false when name is empty" do
+        assert_equal false, Raiskeleton::Page.action_valid?("")
+      end
+
+      should "return true when name is not empty and not nil" do
+        assert Raiskeleton::Page.action_valid?("page")
       end
     end
   end

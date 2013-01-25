@@ -24,7 +24,8 @@ module Raiskeleton
 
     context "cells" do
       setup do
-        name = stub(:nil? => false, :empty? => false)
+        name = stub
+        Raiskeleton::Section.stubs(:name_valid?).with(name).returns(true)
         @section = Raiskeleton::Section.new name
       end
 
@@ -35,7 +36,8 @@ module Raiskeleton
 
     context "render_cells" do
       setup do
-        name = stub(:nil? => false, :empty? => false)
+        name = stub
+        Raiskeleton::Section.stubs(:name_valid?).with(name).returns(true)
         @section = Raiskeleton::Section.new name
       end
 
@@ -63,9 +65,6 @@ module Raiskeleton
 
       context "show" do
         should "raise an exception when state is nil" do
-          setup do
-
-          end
           assert_raise(RuntimeError) do
             name = stub(:nil? => false, :empty? => false)
             @section.render_cell name, nil, stub
