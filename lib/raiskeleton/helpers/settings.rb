@@ -52,7 +52,6 @@ module Raiskeleton
       def default_settings
         @default_settings ||= {}
       end
-
     end
   end
 end
