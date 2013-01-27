@@ -18,6 +18,7 @@ module Raiskeleton
         raise "group #{name} was already registered"
       end
       groups[name].instance_eval(&block) if block_given?
+      groups[name].validate!
     end
 
 #    def get_group(group_name)

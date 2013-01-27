@@ -89,5 +89,28 @@ module Raiskeleton
         assert_equal layout_name, group.default_layout
       end
     end
+
+    context "validate!" do
+      setup do
+        name = stub(:empty? => false)
+        @group = Raiskeleton::Group.new name
+      end
+
+      should "raise an exception when default_layout is not definied" do
+        assert_raise(RuntimeError) do
+          @group.validate!
+        end
+      end
+
+      should "raise an exception when default_layout is not one of layouts" do
+        name = stub(:empty? => false)
+        @group.add_layout(name)
+        @group.default_layout = name
+
+        assert_raise(RuntimeError) do
+          @group.validate!
+        end
+      end
+    end
   end
 end

@@ -24,7 +24,7 @@ module Raiskeleton
 
       should "register group with given name" do
         name = stub
-        group = stub
+        group = stub_everything
         Raiskeleton::Group.stubs(:new).with(name).returns(group)
         @skeleton.register_group(name)
 
@@ -33,7 +33,7 @@ module Raiskeleton
 
       should "raise an exception when group already exists" do
         name = stub
-        Raiskeleton::Group.stubs(:new).with(name).returns(stub).once
+        Raiskeleton::Group.stubs(:new).with(name).returns(stub_everything).once
 
         @skeleton.register_group(name)
         assert_raise(RuntimeError) do
@@ -42,13 +42,22 @@ module Raiskeleton
       end
 
       should "call block when registering a group" do
-        name = stub(:empty? => false)
-        group = stub
+        name = stub
+        group = stub_everything
         group.expects(:instance_eval)
         Raiskeleton::Group.expects(:new).with(name).returns(group)
         block = Proc.new { }
 
         @skeleton.register_group(name,&block)
+      end
+
+      should "call validate! when registering a group" do
+        name = stub
+        group = stub
+        group.expects(:validate!)
+        Raiskeleton::Group.expects(:new).with(name).returns(group)
+
+        @skeleton.register_group(name)
       end
     end
 

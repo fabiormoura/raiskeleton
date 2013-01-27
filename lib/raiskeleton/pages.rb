@@ -61,6 +61,5 @@ module Raiskeleton
  #     end
  #     return layout
  #   end
-
   end
 end
