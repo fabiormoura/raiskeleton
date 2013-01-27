@@ -5,10 +5,8 @@ module Raiskeleton
     attr_accessor :name
     attr_accessor :sections
 
-    INVALID_NAME = "layout name cannot be nil or empty"
-
     def initialize(name)
-      raise INVALID_NAME if not Raiskeleton::Layout.name_valid?(name)
+      raise "layout name cannot be nil or empty" if not Raiskeleton::Layout.name_valid?(name)
       self.name = name
       self.sections = {}
     end

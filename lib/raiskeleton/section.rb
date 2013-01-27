@@ -3,10 +3,8 @@ module Raiskeleton
     attr_accessor :name
     attr_accessor :cells
 
-    INVALID_NAME = "section name cannot be nil or empty"
-
     def initialize(name)
-      raise INVALID_NAME if not Raiskeleton::Section.name_valid?(name)
+      raise "section name cannot be nil or empty" if not Raiskeleton::Section.name_valid?(name)
       self.name = name
       self.cells = []
     end
