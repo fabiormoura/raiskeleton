@@ -17,7 +17,7 @@ module Raiskeleton
       if not sections.has_key?(name)
         sections[name] = Raiskeleton::Section.new(name)
       end
-      block.call(sections[name]) if block_given?
+      sections[name].instance_eval(&block) if block_given?
     end
 
     def self.name_valid?(name)

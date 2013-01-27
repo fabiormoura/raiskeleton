@@ -59,10 +59,10 @@ module Raiskeleton
       should "call block when updating section" do
         name = stub
         section = stub
+        section.expects(:instance_eval)
         Raiskeleton::Section.stubs(:name_valid?).returns(true)
         Raiskeleton::Section::expects(:new).with(name).returns(section)
         block = Proc.new { }
-        block.expects(:call).with(section)
 
         @page.update_section(name,&block)
       end

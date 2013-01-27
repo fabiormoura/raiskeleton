@@ -25,7 +25,7 @@ module Raiskeleton
 
       layout = Raiskeleton::Layout.new(name)
       self.layouts[name] = layout
-      block.call(layout) if block_given?
+      layout.instance_eval(&block) if block_given?
     end
 
 #    def get_layout(name)

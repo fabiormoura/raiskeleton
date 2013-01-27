@@ -24,14 +24,14 @@ module Raiskeleton
       if not pages.has_key?(action)
         pages[action] = Raiskeleton::Page.new(action)
       end
-      block.call(pages[action]) if block_given?
+      pages[action].instance_eval(&block) if block_given?
     end
 
     def update_section(name,&block)
       if not sections.has_key?(name)
         sections[name] = Raiskeleton::Section.new(name)
       end
-      block.call(sections[name]) if block_given?
+      sections[name].instance_eval(&block) if block_given?
     end
 
 #    def render_sections_to_view(view,group)

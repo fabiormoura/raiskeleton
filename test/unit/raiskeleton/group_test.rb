@@ -69,10 +69,10 @@ module Raiskeleton
       should "call block when adding layout" do
         name = stub
         layout = stub
+        block = Proc.new {}
+        layout.expects(:instance_eval)
         Raiskeleton::Layout.stubs(:name_valid?).returns(true)
-        Raiskeleton::Layout::expects(:new).with(name).returns(layout)
-        block = Proc.new { }
-        block.expects(:call).with(layout)
+        Raiskeleton::Layout.expects(:new).with(name).returns(layout)
 
         @group.add_layout(name,&block)
       end
