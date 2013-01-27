@@ -6,10 +6,6 @@ require 'mocha'
 module Raiskeleton
   class GroupTest < Test::Unit::TestCase
     context "name" do
-      setup do
-        Raiskeleton::Group.registered_group_names.clear
-      end
-
       should "create a group with the given name" do
         group = Raiskeleton::Group.new "group"
         assert_equal "group", group.name
@@ -24,13 +20,6 @@ module Raiskeleton
       should "raise an exception when name is empty" do
         assert_raise(RuntimeError) do
           Raiskeleton::Group.new ""
-        end
-      end
-
-      should "raise an exception when name is duplicated" do
-        Raiskeleton::Group.new "group"
-        assert_raise(RuntimeError) do
-          Raiskeleton::Group.new "group"
         end
       end
     end

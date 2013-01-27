@@ -2,20 +2,13 @@ require 'raiskeleton/layout'
 
 module Raiskeleton
   class Group
-    @@registered_group_names = []
     attr_accessor :layouts
     attr_accessor :name
     attr_accessor :default_layout
 
-    def self.registered_group_names
-      @@registered_group_names
-    end
-
     def initialize(name)
       raise "group name cannot not be nil or empty" if name.nil? || name.empty?
-      raise "group name already exists" if @@registered_group_names.include?(name)
 
-      @@registered_group_names << name
       self.name = name
       self.layouts = {}
     end
