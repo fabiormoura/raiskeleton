@@ -36,7 +36,7 @@ module Raiskeleton
 
       should "create a layout with given name" do
         name = stub(:nil? => false, :empty? => false)
-        layout = stub
+        layout = stub_everything
 
         Raiskeleton::Layout.expects(:new).with(name).returns(layout)
 
@@ -49,6 +49,7 @@ module Raiskeleton
       should "raise an exception when layout is already exists" do
         name = stub
         Raiskeleton::Layout.stubs(:name_valid?).returns(true)
+        Raiskeleton::Layout.expects(:new).with(name).returns(stub_everything)
         @group.add_layout(name)
         assert_raise(RuntimeError) do
           @group.add_layout(name)
@@ -57,13 +58,24 @@ module Raiskeleton
 
       should "call block when adding layout" do
         name = stub
-        layout = stub
+        layout = stub_everything
         block = Proc.new {}
         layout.expects(:instance_eval)
         Raiskeleton::Layout.stubs(:name_valid?).returns(true)
         Raiskeleton::Layout.expects(:new).with(name).returns(layout)
 
         @group.add_layout(name,&block)
+      end
+
+      should "validate layout when creating it"do
+        name = stub
+        layout = stub
+        layout.expects(:validate!)
+
+        Raiskeleton::Layout.stubs(:name_valid?).returns(true)
+        Raiskeleton::Layout.expects(:new).with(name).returns(layout)
+
+        @group.add_layout(name)
       end
 
     end
@@ -81,7 +93,7 @@ module Raiskeleton
         name = stub(:nil? => false, :empty? => false)
         layout_name = stub
         Raiskeleton::Layout.stubs(:name_valid?).returns(true)
-        Raiskeleton::Layout.expects(:new).with(layout_name).returns(stub)
+        Raiskeleton::Layout.expects(:new).with(layout_name).returns(stub_everything)
 
         group = Raiskeleton::Group.new name
         group.add_layout(layout_name)
@@ -96,7 +108,15 @@ module Raiskeleton
         @group = Raiskeleton::Group.new name
       end
 
-      should "raise an exception when default_layout is not definied" do
+      should "raise an exception when default_layout is nil" do
+        assert_raise(RuntimeError) do
+          @group.validate!
+        end
+      end
+
+      should "raise an exception when default_layout is empty" do
+        @group.default_layout = stub(:empty? => true)
+
         assert_raise(RuntimeError) do
           @group.validate!
         end
@@ -104,6 +124,7 @@ module Raiskeleton
 
       should "raise an exception when default_layout is not one of layouts" do
         name = stub(:empty? => false)
+        Raiskeleton::Layout.expects(:new).with(name).returns(stub_everything)
         @group.add_layout(name)
         @group.default_layout = name
 

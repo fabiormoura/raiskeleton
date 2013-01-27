@@ -19,11 +19,17 @@ module Raiskeleton
       layout = Raiskeleton::Layout.new(name)
       self.layouts[name] = layout
       layout.instance_eval(&block) if block_given?
+      layout.validate!
     end
 
     def validate!
-      raise "default_layout needs to be specified" if default_layout.nil?
-      raise "default_layout needs to be one of the specified layouts of the group" if layouts.has_key?(default_layout)
+      if default_layout.nil? || default_layout.empty?
+        raise "default_layout needs to be specified"
+      end
+
+      if layouts.has_key?(default_layout)
+        raise "default_layout needs to be one of the specified layouts of the group"
+      end
     end
 
 #    def get_layout(name)

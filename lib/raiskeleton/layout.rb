@@ -1,7 +1,7 @@
 require 'raiskeleton/section'
 module Raiskeleton
   class Layout
-    #attr_accessor :path
+    attr_accessor :path
     attr_accessor :name
     attr_accessor :sections
 
@@ -20,6 +20,12 @@ module Raiskeleton
 
     def self.name_valid?(name)
       !name.nil? && !name.empty?
+    end
+
+    def validate!
+      if path.nil? || path.empty?
+        raise "layout #{name} has not path to the layout file defined"
+      end
     end
 
     #def render_sections_to_view(view)

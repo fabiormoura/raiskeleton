@@ -81,5 +81,25 @@ module Raiskeleton
         assert Raiskeleton::Layout.name_valid?("layout")
       end
     end
+
+    context "validate!" do
+      setup do
+        @layout = Raiskeleton::Layout.new stub(:empty? => false)
+      end
+
+      should "raise an exception when path is nil" do
+        assert_raise(RuntimeError) do
+          @layout.validate!
+        end
+      end
+
+      should "raise an exception when path is empty" do
+        @layout.path = stub(:empty? => true)
+
+        assert_raise(RuntimeError) do
+          @layout.validate!
+        end
+      end
+    end
   end
 end
